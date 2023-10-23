@@ -48,7 +48,7 @@ X_train, X_test, Y_train, Y_test = data_prepare.data_load(dataset, classes=class
 
 
 # Training
-steps = 200
+steps = 1
 learning_rate = 0.01
 batch_size = 25
 
@@ -83,7 +83,7 @@ for it in range(steps):
 
 # Testing
 trained_params = params
-predictions = [quantum_circuit.QCNN(x, trained_params, U, U_params, num_qubits) for x in X_test]
+predictions = [quantum_circuit.QCNN(x, params, U, U_params, num_qubits) for x in X_train]
 
 accuracy = accuracy_test(predictions, Y_test)
 print("Accuracy for " + U + " :" + str(accuracy))
