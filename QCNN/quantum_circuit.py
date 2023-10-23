@@ -1,4 +1,4 @@
-# Source: http://github.com/takh04/QCNN# Source: http://github.com/takh04/QCNN
+#Source: http://github.com/takh04/QCNN
 import pennylane as qml
 import ansatz
 import encoder
@@ -85,9 +85,9 @@ dev = qml.device('default.qubit', wires=8)
 
 
 @qml.qnode(dev)
-def QCNN(X, params, U, U_params, embedding_type='Amplitude', cost_fn='cross_entropy'):
+def QCNN(X, params, U, U_params, num_qubits=8):
     # Data Embedding
-    encoder.data_embedding(X, embedding_type=embedding_type)
+    encoder.data_embedding(X, num_qubits)
 
     # Quantum Convolutional Neural Network
     if U == 'U_TTN':
@@ -117,9 +117,4 @@ def QCNN(X, params, U, U_params, embedding_type='Amplitude', cost_fn='cross_entr
     else:
         print("Invalid ansatz Ansatze")
         return False
-
-    if cost_fn == 'mse':
-        result = qml.expval(qml.PauliZ(4))
-    elif cost_fn == 'cross_entropy':
-        result = qml.probs(wires=4)
-    return result
+    return qml.probs(wires=4)
