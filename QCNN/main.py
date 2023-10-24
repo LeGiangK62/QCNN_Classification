@@ -48,22 +48,14 @@ X_train, X_test, Y_train, Y_test = data_prepare.data_load(dataset, classes=class
 
 
 # Training
-steps = 1
+steps = 100
 learning_rate = 0.01
 batch_size = 25
 
 
-## Understand this part please
-Unitaries = ['U_SU4', 'U_SU4_1D', 'U_SU4_no_pooling', 'U_9_1D']
-U_num_params = [15, 15, 15, 2]
-
-U = Unitaries[0]
-U_params = U_num_params[0]
-
-if U == 'U_SU4_no_pooling' or U == 'U_SU4_1D' or U == 'U_9_1D':
-    total_params = U_params * 3
-else:
-    total_params = U_params * 3 + 2 * 3
+U = 'U_SU4'
+U_params = 15
+total_params = U_params * 3 + 2 * 3
 
 
 params = np.random.randn(total_params, requires_grad=True)
@@ -80,12 +72,11 @@ for it in range(steps):
     loss_history.append(cost_new)
     if it % 10 == 0:
         print("iteration: ", it, " cost: ", cost_new)
-
+print("=== Done Training ===")
 # Testing
 trained_params = params
-predictions = [quantum_circuit.QCNN(x, params, U, U_params, num_qubits) for x in X_train]
+predictions = [quantum_circuit.QCNN(x, params, U, U_params, num_qubits) for x in X_test]
 
 accuracy = accuracy_test(predictions, Y_test)
 print("Accuracy for " + U + " :" + str(accuracy))
 
-print("=== Done ===")

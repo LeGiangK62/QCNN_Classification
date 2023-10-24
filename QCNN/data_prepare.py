@@ -7,13 +7,15 @@ def data_load(dataset, classes=[0, 1]):
 
     x_train, x_test = x_train[..., np.newaxis] / 255.0, x_test[..., np.newaxis] / 255.0  # normalize the data
 
-    # Data Pre-processing
-    X_train = x_train
-    X_test = x_test
+    # Take only classes in classes
+    train_mask = np.where((y_train == classes[0]) | (y_train == classes[1]))
+    test_mask = np.where((y_test == classes[0]) | (y_test == classes[1]))
 
-    # Take only 0 and 1 classes
-    Y_train = [1 if y in classes else 0 for y in y_train]
-    Y_test = [1 if y in classes else 0 for y in y_test]
+    X_train, X_test = x_train[train_mask], x_test[test_mask]
+    Y_train, Y_test = y_train[train_mask], y_test[test_mask]
+
+    Y_train = [1 if y == classes[0] else 0 for y in Y_train]
+    Y_test = [1 if y == classes[0] else 0 for y in Y_test]
 
     X_train = tf.image.resize(X_train[:], (256, 1)).numpy()
     X_test = tf.image.resize(X_test[:], (256, 1)).numpy()
